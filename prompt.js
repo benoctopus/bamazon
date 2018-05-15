@@ -18,7 +18,7 @@ module.exports = {
   CIntro() {
     return new Promise(resolve => this.ask(
       'What can we help you with?',
-      ['1. Shop', '2. show cart', '3. quit']
+      ['1. Shop', '2. checkout', '3. quit']
     ).then(res => {
       resolve(parseInt(res.input.split('. ')[0]) - 1);
     }));
@@ -55,5 +55,11 @@ module.exports = {
     return new Promise(resolve => this.ask(
       'continue shopping?'
     ).then(res => resolve(res.input)))
+  },
+
+  CCheck() {
+    return new Promise(resolve => this.ask(
+      'Complete purchase?'
+    ))
   }
 };

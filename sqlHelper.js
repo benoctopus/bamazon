@@ -33,6 +33,9 @@ class Helper {
       get_all_items:
         `SELECT * FROM inventory;`,
 
+      change_stock:
+      "UPDATE inventory SET stock='?' WHERE id='?'",
+
       create_customer: `
         INSERT INTO customers (name)
         VALUES (?);
@@ -63,8 +66,17 @@ class Helper {
     return this.command('get_all_items');
   }
 
+  updateStock(number, id) {
+    return this.command('change_stock', [number, id])
+  }
+
   createCustomer(name) {
-    this.command('create_customer', [name]);
+    this.command('cgit@github.com:benoctopus/bamazon.gitreate_customer', [name]);
+  }
+
+  kill() {
+    this.connection.end();
+    process.exit();
   }
 }
 

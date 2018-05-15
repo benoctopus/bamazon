@@ -1,9 +1,8 @@
 const prompt = require('./prompt');
 const db = require('./sqlHelper')();
-const t = require('console.table');
 const shoppingCart = require('./cart')();
+const t = require('console.table');
 const colors = require('colors');
-
 let inventory;
 
 const itemTemp = data => (
@@ -14,13 +13,13 @@ const itemTemp = data => (
 const router = {
   intro: [
     shop,
-    () => showCart(),
-    () => process.exit()
+    checkout,
+    db.kill
   ]
 };
 
 function intro() {
-  console.log('----WELCOME TO BAMAZON----\n'.green);
+  console.log('\n----WELCOME TO BAMAZON----\n'.green);
   console.log(t.getTable(inventory), '\n\n');
   prompt.CIntro()
     .then(rout => router.intro[rout]())
@@ -65,9 +64,7 @@ async function shop() {
       await db.command('get_categories')
         .then(data => data.map(data => data.CATEGORY))
     );
-  };
-
-
+  }
 
   async function promptItem() {
     return await prompt.CShopItems(
@@ -92,6 +89,28 @@ async function shop() {
   }
 }
 
+async function checkout() {
+  if (Object.keys(shoppingCart.cart).length > 0) {
+    showCart();
+    if (prompt.CCheck()) {
+      for (let i = 0; i < Object.values(shoppingCart.cart).length; i++) {
+        let obj = Object.values(shoppingCart.cart)[i];
+        await db.updateStock(
+          obj.item.stock - obj.quantity,
+          obj.item.id
+        )
+      }
+    }
+    else {
+      intro()
+    }
+  }
+  else {
+    console.log('No items in cart'.red);
+    intro();
+  }
+}
+
 function showCart() {
   console.log(
     t.getTable(shoppingCart.readableExport())
@@ -99,7 +118,11 @@ function showCart() {
   console.log('Total: ' + shoppingCart.finalTotal())
 }
 
-db.inventory().then(data => {
-  inventory = data;
-  intro()
-});
+function updateInventory() {
+  db.inventory().then(data => {
+    inventory = data;
+    intro()
+  });
+}
+
+updateInventory();

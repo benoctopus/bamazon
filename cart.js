@@ -1,4 +1,5 @@
 class ShoppingCart {
+
   constructor() {
     this.cart = {};
   }
