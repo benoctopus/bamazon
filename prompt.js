@@ -60,6 +60,6 @@ module.exports = {
   CCheck() {
     return new Promise(resolve => this.ask(
       'Complete purchase?'
-    ))
+    ).then(res => resolve(res.input)))
   }
 };
