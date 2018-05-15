@@ -106,6 +106,7 @@ async function checkout() {
       }
 
       console.log('purchase complete');
+      shoppingCart.clear();
       updateInventory();
     }
 
