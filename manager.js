@@ -7,7 +7,8 @@ const router = [
   viewProducts,
   viewLow,
   addInven,
-  newItem
+  newItem,
+  process.exit
 ];
 
 function intro() {
@@ -40,12 +41,59 @@ async function viewLow() {
   intro()
 }
 
-function addInven() {
+async function addInven() {
 
+  let inventory = await db.inventory();
+  let items = await prompt.mInvenChecklist(
+    inventory.map(
+      data => `${data.id}. name: ${data.name} stock: ${data.stock}`
+    )
+  );
+
+  if (items.length > 0) {
+    console.log('---TO BE RESTOCKED---'.green);
+    console.log(
+      t.getTable(items.map(data => {
+          return {
+            item: inventory[data - 1].name,
+            current_stock: inventory[data - 1].stock
+          }
+        })
+      )
+    )
+  }
+
+  else {
+    console.log('NO ITEMS SELECTED'.red);
+    return intro();
+  }
+
+  if (await prompt.mInvenConf()) {
+    updateStock().then(() => {
+      console.log('INVENTORY COUNT COMPLETE'.green);
+      return viewProducts();
+    });
+  }
+
+  else {
+    return intro();
+  }
+
+  async function updateStock() {
+
+    for (let i = 0; i < items.length; i++) {
+      let newStock = await prompt.mInvenAmount(inventory[items[i] - 1]);
+      await db.updateStock(
+        inventory[items[i] - 1].stock + newStock,
+        items[i]
+      );
+    }
+  }
 }
 
 function newItem() {
 }
+
 
 console.log('hey boss :)\n'.green);
 intro();

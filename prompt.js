@@ -85,10 +85,35 @@ module.exports = {
           '1. View Products',
           '2. View Low Inventory',
           '3. Add Inventory',
-          '4. Add New Product'
+          '4. Add New Product',
+          '5. Quit'
         ]
-      ).then(res => resolve(parseInt(res.input.split('. ')[0]) -1)))
+      ).then(res => resolve(parseInt(res.input.split('. ')[0]) - 1)))
     },
-  }
+
+    mInvenChecklist(options) {
+      return new Promise(resolve => this.ask(
+        "choose items to stock",
+        options,
+        'checkbox'
+      ).then(res => resolve(
+        res.input.map(data => parseInt(data.split('.')[0]))
+      )));
+    },
+
+    mInvenConf() {
+      return new Promise(resolve => ask(
+        'Are these item(s) correct?'
+      ).then(res => resolve(res.input)))
+    },
+
+    mInvenAmount(item) {
+      return new Promise(resolve => ask(
+        `amount of ${item.name} (current stock: ${item.stock})`,
+        null,
+        'input'
+      ).then(res => resolve(parseInt(res.input))))
+    }
+  },
 
 };
