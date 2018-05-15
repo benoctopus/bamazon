@@ -90,23 +90,29 @@ async function shop() {
 }
 
 async function checkout() {
+
   if (Object.keys(shoppingCart.cart).length > 0) {
     showCart();
+
     if (!!(await prompt.CCheck())) {
+
       for (let i = 0; i < Object.values(shoppingCart.cart).length; i++) {
-        console.log(i);
+
         let obj = Object.values(shoppingCart.cart)[i];
         await db.updateStock(
           obj.item.stock - obj.quantity,
           obj.item.id
         ).then(res => res);
       }
+
       console.log('purchase complete');
       updateInventory();
     }
+
     else {
       intro()
     }
+
   }
   else {
     console.log('No items in cart'.red);
