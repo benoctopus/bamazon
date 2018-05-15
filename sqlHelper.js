@@ -1,4 +1,4 @@
-module.exports = () => new Helper();
+//helper class for mysql
 
 class Helper {
 
@@ -20,6 +20,7 @@ class Helper {
     });
 
     this.params = {
+      //database command abstraction
 
       check:
         'SHOW DATABASES;',
@@ -34,7 +35,7 @@ class Helper {
         `SELECT * FROM inventory;`,
 
       change_stock:
-      "UPDATE inventory SET stock='?' WHERE id='?'",
+        "UPDATE inventory SET stock='?' WHERE id='?'",
 
       create_customer: `
         INSERT INTO customers (name)
@@ -54,6 +55,7 @@ class Helper {
   }
 
   command(func, args = []) {
+    //send command to db return promise to main
     return new Promise(resolve => this.connection.query(
       this.params[func], args, (err, data) => {
         if (err) throw err;
@@ -62,6 +64,8 @@ class Helper {
     );
   }
 
+  //lightweight abstractions for common commands
+
   inventory() {
     return this.command('get_all_items');
   }
@@ -69,17 +73,9 @@ class Helper {
   updateStock(number, id) {
     return this.command('change_stock', [number, id])
   }
-
-  createCustomer(name) {
-    this.command('cgit@github.com:benoctopus/bamazon.gitreate_customer', [name]);
-  }
-
-  kill() {
-    this.connection.end();
-    process.exit();
-  }
 }
 
+module.exports = () => new Helper();
 
 // connect = module.exports();
 //

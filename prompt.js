@@ -1,8 +1,12 @@
+//exports a collection of user prompts
+//all return promises
+
 const prompt = require('inquirer').prompt;
 
 module.exports = {
 
   ask(message, options, type) {
+    //main prompt template
     return prompt([
       {
         name: 'input',
@@ -15,7 +19,9 @@ module.exports = {
     ])
   },
 
-  CIntro() {
+  //customer view prompts
+
+  cIntro() {
     return new Promise(resolve => this.ask(
       'What can we help you with?',
       ['1. Shop', '2. checkout', '3. quit']
@@ -24,7 +30,7 @@ module.exports = {
     }));
   },
 
-  CShopCat(options) {
+  cShopCat(options) {
     options.push('back');
     return new Promise(resolve => this.ask(
       'What department would you like to visit?',
@@ -32,18 +38,18 @@ module.exports = {
     ).then(res => resolve(res.input)));
   },
 
-  CShopItems(options) {
+  cShopItems(options) {
     return new Promise(resolve => this.ask(
       'What would you like to add to your cart?',
       options
     ).then(res => resolve(
       res.input !== 'back' ?
-        parseInt(res.input.split(' ')[1])
+        parseInt(res.input.split(' ')[1]) - 1
         : 'back'
     )));
   },
 
-  CShopQuantity(itemTable) {
+  cShopQuantity(itemTable) {
     return new Promise(resolve => this.ask(
       itemTable + '\n how many would you like?',
       null,
@@ -51,13 +57,13 @@ module.exports = {
     ).then(res => resolve(parseInt(res.input))));
   },
 
-  CShopCont() {
+  cShopCont() {
     return new Promise(resolve => this.ask(
       'continue shopping?'
     ).then(res => resolve(res.input)))
   },
 
-  CCheck() {
+  cCheck() {
     return new Promise(resolve => this.ask(
       'Complete purchase?'
     ).then(res => resolve(res.input)))
