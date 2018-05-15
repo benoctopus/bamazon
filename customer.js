@@ -1,7 +1,7 @@
 //customer view for bamazon cli
 const db = require('./sqlHelper')();
 const shoppingCart = require('./cart')();
-const prompt = require('./prompt');
+const prompt = require('./prompt').customer;
 const t = require('console.table');
 const colors = require('colors');
 let inventory;
@@ -53,7 +53,7 @@ async function shop() {
   console.log(
     quantity > 0 ?
       '\nadded to cart\n'.green
-      : '\nnothing added\n'
+      : '\nnothing added\n'.red
   );
 
   //add to cart and prosper
