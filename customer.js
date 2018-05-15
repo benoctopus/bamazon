@@ -1,9 +1,9 @@
 const prompt = require('./prompt');
 const db = require('./sqlHelper')();
 const t = require('console.table');
+const shoppingCart = require('./cart')();
 const colors = require('colors');
 
-const cart = [];
 let inventory;
 
 const itemTemp = data => (
@@ -40,6 +40,24 @@ async function shop() {
   }
 
   let quantity = await promptQuantity();
+  console.log(
+    quantity > 0 ?
+      '\nadded to cart\n'.green
+      : '\nnothing added\n'
+  );
+
+  shoppingCart.append(
+    inventory[item],
+    quantity
+  );
+  showCart();
+
+  return (
+    await prompt.CShopCont() ?
+      shop
+      : intro
+  )();
+
 
   //async help functions
   async function PromptCat() {
@@ -47,7 +65,9 @@ async function shop() {
       await db.command('get_categories')
         .then(data => data.map(data => data.CATEGORY))
     );
-  }
+  };
+
+
 
   async function promptItem() {
     return await prompt.CShopItems(
@@ -66,8 +86,17 @@ async function shop() {
       console.log('\ninvalid quanitity, try again\n'.red);
       return await promptQuantity()
     }
-    else {return q}
+    else {
+      return q
+    }
   }
+}
+
+function showCart() {
+  console.log(
+    t.getTable(shoppingCart.readableExport())
+  );
+  console.log('Total: ' + shoppingCart.finalTotal())
 }
 
 db.inventory().then(data => {

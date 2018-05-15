@@ -33,7 +33,6 @@ module.exports = {
   },
 
   CShopItems(options) {
-    options.push('back');
     return new Promise(resolve => this.ask(
       'What would you like to add to your cart?',
       options
@@ -50,5 +49,11 @@ module.exports = {
       null,
       'input'
     ).then(res => resolve(parseInt(res.input))));
+  },
+
+  CShopCont() {
+    return new Promise(resolve => this.ask(
+      'continue shopping?'
+    ).then(res => resolve(res.input)))
   }
 };
