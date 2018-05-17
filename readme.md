@@ -1,6 +1,6 @@
 # Bamazon CLI
 
-Mock Mock amazon cli app with customer, manager, and supervisor views.
+Mock amazon cli app with customer, manager, and supervisor views.
 
 ## Installation
 
