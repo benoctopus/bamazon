@@ -91,12 +91,12 @@ class Helper {
     return this.command('new_product', args);
   }
 
-  updateStock(number, sales, id) {
-    if (!id) {
-      return this.command('add_stock', [number, sales])
+  updateStock(arg1, arg2, arg3) {
+    if (!arg3) {
+      return this.command('add_stock', [arg1, arg2])
     }
     else {
-      return this.command('change_stock', [number, sales, id])
+      return this.command('change_stock', [arg1, arg2, arg3])
     }
   }
 }
