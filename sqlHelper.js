@@ -28,18 +28,30 @@ class Helper {
       get_categories:
         'SELECT DISTINCT(category) AS CATEGORY FROM inventory',
 
+      get_categories_admin:
+        'SELECT DISTINCT(name) AS CATEGORY FROM departments',
+
       get_items:
         'SELECT * FROM inventory WHERE category = ?',
 
       get_all_items:
         `SELECT * FROM inventory;`,
 
+      get_departments:
+        `SELECT * FROM departments;`,
+
+      get_sales:
+        'SELECT sales,category FROM inventory',
+
       change_stock:
+        "UPDATE inventory SET stock='?',sales='?' WHERE id='?'",
+
+      add_stock:
         "UPDATE inventory SET stock='?' WHERE id='?'",
 
-      create_customer: `
-        INSERT INTO customers (name)
-        VALUES (?);
+      new_product: `
+        INSERT INTO inventory (category, name, price, stock)
+        VALUES (?, ?, ?, ?);
         `,
 
       create_history: `
@@ -70,8 +82,17 @@ class Helper {
     return this.command('get_all_items');
   }
 
-  updateStock(number, id) {
-    return this.command('change_stock', [number, id])
+  newProduct(args) {
+    return this.command('new_product', args);
+  }
+
+  updateStock(number, sales, id) {
+    if (!id) {
+      return this.command('add_stock', [number, sales])
+    }
+    else {
+      return this.command('change_stock', [number, sales, id])
+    }
   }
 }
 

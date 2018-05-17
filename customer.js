@@ -5,6 +5,7 @@ const prompt = require('./prompt').customer;
 const t = require('console.table');
 const colors = require('colors');
 let inventory;
+let sales = {};
 
 const itemTemp = data => (
   //single item display template string
@@ -130,6 +131,7 @@ async function checkout() {
       let obj = Object.values(shoppingCart.cart)[i];
       await db.updateStock(
         obj.item.stock - obj.quantity,
+        sales[obj.item.id] + obj.total,
         obj.item.id
       ).then(res => res);
     }
@@ -145,7 +147,11 @@ function showCart() {
 
 function updateInventory() {
   db.inventory().then(data => {
-    inventory = data;
+    inventory = data.map(data => {
+      sales[data.id] = data.sales;
+      delete data.sales;
+      return data;
+    });
     intro()
   });
 }

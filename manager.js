@@ -91,7 +91,31 @@ async function addInven() {
   }
 }
 
-function newItem() {
+async function newItem() {
+
+  let categories = await db.command('get_categories_admin');
+  let category = await prompt.mAddCat(
+    categories.map(data => data.CATEGORY)
+  );
+  let name = await prompt.mAddProd('Product Name: ');
+  let price = await prompt.mAddProd('Product Price: ');
+  let stock = await prompt.mAddProd('Initial Stock: ');
+
+  [category, name, price, stock].forEach(val => {
+    if (!val) {
+      console.log('invalid value');
+      return intro();
+    }
+  });
+
+  await db.newProduct([category, name, price, stock]);
+
+  if (await prompt.mBlankConfirm('add another product?')) {
+    return newItem();
+  }
+  else {
+    return intro();
+  }
 }
 
 

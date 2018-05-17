@@ -107,13 +107,52 @@ module.exports = {
       ).then(res => resolve(res.input)))
     },
 
+    mAddCat(options) {
+      options.push('back');
+      return new Promise(resolve => this.ask(
+        'department: ',
+        options
+      ).then(res => resolve(res.input)));
+    },
+
     mInvenAmount(item) {
       return new Promise(resolve => ask(
         `amount of ${item.name} (current stock: ${item.stock})`,
         null,
         'input'
       ).then(res => resolve(parseInt(res.input))))
-    }
+    },
+
+    mAddProd(message) {
+      return new Promise(resolve => ask(
+        message,
+        null,
+        'input'
+      ).then(res => resolve(res.input)))
+    },
+
+    mBlankConfirm(message) {
+      return new Promise(resolve => ask(
+        message,
+        null,
+      ).then(res => resolve(res.input)))
+    },
   },
 
+  supervisor: {
+
+    ask,
+
+    sIntro() {
+      let options = [
+        '1. View Product Sales by Department',
+        '2. Create New Department',
+        '3. quit'
+      ];
+      return new Promise(resolve => ask(
+        '---Main Menu---'.green,
+        options
+      ).then(res => resolve(options.indexOf(res.input))))
+    }
+  }
 };

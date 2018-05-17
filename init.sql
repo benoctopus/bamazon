@@ -2,22 +2,31 @@ DROP DATABASE IF EXISTS bamazon;
 CREATE DATABASE bamazon;
 USE bamazon;
 
-DROP TABLE IF EXISTS inventory;
-
 CREATE TABLE inventory(
     id INT NOT NULL AUTO_INCREMENT,
     name VARCHAR(20) NULL,
     price INT NULL,
     stock INT NULL,
     category VARCHAR(20) NULL,
+    sales INT DEFAULT 0, 
     PRIMARY KEY (id)
 );
 
-CREATE TABLE customers(
+CREATE TABLE departments(
   id INT NOT NULL AUTO_INCREMENT,
   name VARCHAR(20) NULL,
-  PRIMARY KEY(id)
+  overhead INT NULL,
+  PRIMARY KEY (id)
 );
+
+INSERT INTO departments (name, overhead)
+VALUES ('appliances', 10000);
+
+INSERT INTO departments (name, overhead)
+VALUES ('electronics', 8000);
+
+INSERT INTO departments (name, overhead)
+VALUES ('music', 6000);
 
 INSERT INTO inventory (name, price, stock, category)
 VALUES ('toaster', 50, 20, 'appliances');
