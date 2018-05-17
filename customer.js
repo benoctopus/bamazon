@@ -25,6 +25,8 @@ const router = {
 };
 
 function intro() {
+  //main menu routing
+
   console.log(t.getTable(inventory), '\n\n');
   prompt.cIntro()
     .then(rout => router.intro[rout]())
@@ -104,6 +106,7 @@ async function shop() {
 }
 
 async function checkout() {
+  //prompt checkout and apply changes to db
 
   if (Object.keys(shoppingCart.cart).length > 0) {
     showCart();
@@ -146,6 +149,9 @@ function showCart() {
 }
 
 function updateInventory() {
+  //get inventory table and hide management data
+  //always returns to main menu
+
   db.inventory().then(data => {
     inventory = data.map(data => {
       sales[data.id] = data.sales;

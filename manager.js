@@ -1,3 +1,5 @@
+//manager view for bamazon cli
+
 const prompt = require('./prompt').manager;
 const db = require('./sqlHelper')();
 const colors = require('colors');
@@ -16,12 +18,14 @@ function intro() {
 }
 
 async function viewProducts() {
+  //log inventory to console
 
   console.log(t.getTable(await db.inventory()));
   intro()
 }
 
 async function viewLow() {
+  //filter inventory for low stock items
 
   let inventory = await db.inventory();
   let low = [];
@@ -42,6 +46,7 @@ async function viewLow() {
 }
 
 async function addInven() {
+  //prompt new product info and create new db row
 
   let inventory = await db.inventory();
   let items = await prompt.mInvenChecklist(
@@ -80,6 +85,7 @@ async function addInven() {
   }
 
   async function updateStock() {
+    //alter inventory table info with added stock
 
     for (let i = 0; i < items.length; i++) {
       let newStock = await prompt.mInvenAmount(inventory[items[i] - 1]);
@@ -92,6 +98,7 @@ async function addInven() {
 }
 
 async function newItem() {
+  //prompt new item info and append to db
 
   let categories = await db.command('get_categories_admin');
   let category = await prompt.mAddCat(
