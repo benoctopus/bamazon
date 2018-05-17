@@ -54,6 +54,11 @@ class Helper {
         VALUES (?, ?, ?, ?);
         `,
 
+      new_department: `
+        INSERT INTO departments (name, overhead)
+        VALUES (?, ?);
+        `,
+
       create_history: `
         CREATE TABLE ben(
           action_id INT NOT NULL AUTO_INCREMENT,

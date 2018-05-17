@@ -49,8 +49,15 @@ async function viewSales() {
   return intro();
 }
 
-function newDep() {
-  console.log('newdep')
+async function newDep() {
+  let name = await prompt.sAddDep('Department Name:');
+  let overhead = await prompt.sAddDep('Expected department Overhead:');
+  db.command('new_department', [name, overhead])
+    .then(() => intro())
+    .catch(e => {
+      console.log('an error occured', e);
+      return intro();
+    })
 }
 
 intro();

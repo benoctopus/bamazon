@@ -153,6 +153,14 @@ module.exports = {
         '---Main Menu---'.green,
         options
       ).then(res => resolve(options.indexOf(res.input))))
-    }
+    },
+
+    sAddDep(message) {
+      return new Promise(resolve => ask(
+        message,
+        null,
+        'input'
+      ).then(res => resolve(res.input)))
+    },
   }
 };
